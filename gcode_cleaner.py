@@ -71,7 +71,7 @@ def load_coord(filename):
 			l = line.split()
 			gcode.append("G1 X" + "{0:.4}".format(float(l[0])) + " Y" + "{0:.4}".format(float(l[1])) + "]" )
 	except:
-		raise IndexError
+		pass
 	f.close()
 
 	gcode[0].replace("G1","G0")
