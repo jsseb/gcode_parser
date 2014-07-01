@@ -4,13 +4,16 @@
 import sys
 import re
 import argparse
-import numpy as np
 
 def calibrate(gcode, ratio, var=None):
 	"""
 		Searching for gcode numbers, multiply by ratio.
 		var indicates a specific letter to calibrate
 	"""
+	for line in gcode:
+		for c in line:
+
+
 	pass
 
 def loop(gcode,loops):
@@ -42,14 +45,15 @@ def save_gcode(gcode, filename):
 	f.write("{}\n".format(n))
 	f.close()
 
-	#with open('stub.ngcode', 'r') as f, open(filename,'w') as out:
-	#for line in f:
-	#	line = re.sub(r'^.$', lambda m: 'c' + m.groups()[0],line)
-
-	#f.close()
 
 def load_coord(filename):
-	pass
+	gcode = []
+	f = open(filename,'r')
+	for line in f:
+		l = line.split()
+		gcode.append("G1 X" + str(float(l[0])) + " Y" + str(float(l[1])) )
+	print gcode
+	f.close()
 
 def load_gcode(filename):
 	u_gcode = []
@@ -79,6 +83,7 @@ def main():
 	parser = argparse.ArgumentParser(description='Convert Slic3r gcode')
 
 	parser.add_argument('--file',dest='file',required=False)
+	parser.add_argument('--output',dest='file',required=False)
 	parser.add_argument('--loops',dest='loops',required=False)
 	parser.add_argument('--calibrate',dest='ratio',required=False)
 	parser.add_argument('--var',dest='var',required=False)
@@ -86,10 +91,10 @@ def main():
 	args = parser.parse_args()
 
 	if (args,'file'):
-		filename = args.file
+		gcode = load_gcode(args.file)
 	else:
 		if hasattr(args,'coord'):
-			filename = args.coord
+			gcode = load_coord(args.coord)
 		else:
 			raise Exception("Error loading File")
 			return -1
@@ -104,8 +109,7 @@ def main():
 		if args.loops > 1:
 			gcode = loop(gcode,int(args.loops))
 
-	gcode = load_gcode(filename)
-	save_gcode(gcode,'stub2.gcode')
+	save_gcode(gcode,'stub.gcode')
 	
 
 if __name__ == '__main__':
