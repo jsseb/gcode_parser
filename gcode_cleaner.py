@@ -12,8 +12,7 @@ def calibrate(gcode, ratio, var=None):
 	"""
 	for line in gcode:
 		for c in line:
-
-
+			pass
 	pass
 
 def loop(gcode,loops):
@@ -49,11 +48,14 @@ def save_gcode(gcode, filename):
 def load_coord(filename):
 	gcode = []
 	f = open(filename,'r')
-	for line in f:
-		l = line.split()
-		gcode.append("G1 X" + str(float(l[0])) + " Y" + str(float(l[1])) )
-	print gcode
+	try:
+		for line in f:
+			l = line.split()
+			gcode.append("G1 X" + "{0:.4}".format(float(l[0])) + " Y" + "{0:.4}".format(float(l[1])) )
+	except:
+		raise IndexError
 	f.close()
+	return gcode
 
 def load_gcode(filename):
 	u_gcode = []
@@ -65,8 +67,8 @@ def load_gcode(filename):
 	#Clean all lines that dont start with G0 or G1
 	#Clean all A# and F# attributes
 	gcode = []
-	#pattern = re.compile("\\b(F|A)\\W",re.I)
 	pattern = re.compile('A[0-9]*.[0-9]*|F[0-9]*.[0-9]*')
+
 	for line in u_gcode:
 		if len(line) > 0:
 			if line[0] == "G0" or line[0] == "G1":
@@ -85,27 +87,27 @@ def main():
 	parser.add_argument('--file',dest='file',required=False)
 	parser.add_argument('--output',dest='file',required=False)
 	parser.add_argument('--loops',dest='loops',required=False)
-	parser.add_argument('--calibrate',dest='ratio',required=False)
+	parser.add_argument('--calibrate',dest='calibrate',required=False)
 	parser.add_argument('--var',dest='var',required=False)
 	parser.add_argument('--coord',dest='coord',required=False)
 	args = parser.parse_args()
-
-	if (args,'file'):
+	
+	if args.file is not None:
 		gcode = load_gcode(args.file)
 	else:
-		if hasattr(args,'coord'):
+		if args.coord is not None:
 			gcode = load_coord(args.coord)
 		else:
 			raise Exception("Error loading File")
 			return -1
 
-	if hasattr(args,'calibrate'):
-		if hasattr(args,'var'):
+	if args.calibrate is not None:
+		if args.var is not None:
 			gcode = calibrate(gcode,args.calibrate,var=args.var)
 		else:
 			gcode = calibrate(gcode,args.calibrate)
 
-	if hasattr(args,'loops'):
+	if args.loops is not None:
 		if args.loops > 1:
 			gcode = loop(gcode,int(args.loops))
 
