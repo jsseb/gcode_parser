@@ -10,7 +10,10 @@
 '''
 import numpy as np
 import argparse
-import matplotlib.pyplot as plt
+try:
+	import matplotlib.pyplot as plt
+except:
+	raise ImportError
 
 
 def lissajous(a,b,rng,delta=None):
