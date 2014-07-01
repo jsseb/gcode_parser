@@ -40,7 +40,7 @@ def save_gcode(gcode, filename):
 	n = n.replace(']','\n')
 	n = n.replace('\'','')
 
-	f = open('stub.ngcode', 'w')
+	f = open('stub.gcode', 'w')
 	f.write("{}\n".format(n))
 	f.close()
 
@@ -51,7 +51,7 @@ def load_coord(filename):
 	try:
 		for line in f:
 			l = line.split()
-			gcode.append("G1 X" + "{0:.4}".format(float(l[0])) + " Y" + "{0:.4}".format(float(l[1])) )
+			gcode.append("G1 X" + "{0:.4}".format(float(l[0])) + " Y" + "{0:.4}".format(float(l[1])) + "]" )
 	except:
 		raise IndexError
 	f.close()
