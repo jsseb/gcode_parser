@@ -4,6 +4,9 @@
 '''
 	Generate Gcode for Lissajous Curve
 	Future ref will generate Gcode for other curves
+
+	Test range : [1,1 + np.pi,0.1]
+	Test delta : 0
 '''
 import numpy as np
 import argparse
@@ -37,7 +40,7 @@ def print_shit(curve):
 	n = n.replace(']','\n')
 	n = n.replace('\'','')
 	
-	f.write("{}\n".format(n))
+	f.write("{}".format(n))
 	f.close()
 
 def plot_shit(curve):
@@ -45,5 +48,23 @@ def plot_shit(curve):
 	plt.show()
 
 if __name__ == '__main__':
-	#plot_shit(lissajous(2,4,[1,1 + np.pi,0.1],delta=0))
-	print_shit(lissajous(2,4,[1,1 + np.pi,0.1],delta=0))
+	parser = argparse.ArgumentParser(description='Prints and Plots the Lissajous Knot')
+
+	parser.add_argument('--x',dest='x',required=True)
+	parser.add_argument('--y',dest='y',required=True)
+	parser.add_argument('--precission',dest='precission',required=False)
+	parser.add_argument('--plot',dest='plot',required=False)
+	parser.add_argument('--output',dest='file',required=False)
+	parser.add_argument('--delta',dest='delta',required=False)
+	args = parser.parse_args()
+	
+	if args.precission is None:
+		precission = 0.1
+	else:
+		precission = args.precission
+	if args.x is not None and args.y is not None:
+		l = lissajous(int(args.x),int(args.y),[0,2*np.pi, precission],delta = args.delta)
+	if args.file is not None:
+		print_shit(l)
+	if args.plot is not None:
+		plot_shit(l)

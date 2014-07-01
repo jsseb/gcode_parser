@@ -5,15 +5,33 @@ import sys
 import re
 import argparse
 
+def invert_axis(gcode,axis):
+	pass
+
 def calibrate(gcode, ratio, var=None):
 	"""
 		Searching for gcode numbers, multiply by ratio.
 		var indicates a specific letter to calibrate
 	"""
+	ngcode = []
 	for line in gcode:
-		for c in line:
-			pass
-	pass
+		l = []
+		for c in line.split():
+			print(c)
+			if c.find("X"):
+				aux = c.replace("X"," ")
+				aux = float(aux)*ratio
+				c = "{0:.4}".format(aux)
+			if c.find("Y"):
+				aux = c.replace("Y"," ")
+				aux = float(aux)*ratio
+				c = "{0:.4}".format(aux)
+			l = l + c
+		print (l)
+		ngcode.append(l)
+
+	return ngcode
+
 
 def loop(gcode,loops):
 	return [gcode.append[gcode] for x in range(loops)]
@@ -41,7 +59,7 @@ def save_gcode(gcode, filename):
 	n = n.replace('\'','')
 
 	f = open('stub.gcode', 'w')
-	f.write("{}\n".format(n))
+	f.write("{}".format(n))
 	f.close()
 
 
@@ -55,6 +73,8 @@ def load_coord(filename):
 	except:
 		raise IndexError
 	f.close()
+
+	gcode[0].replace("G1","G0")
 	return gcode
 
 def load_gcode(filename):
