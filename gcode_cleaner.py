@@ -6,6 +6,10 @@ import re
 import argparse
 
 def invert_axis(gcode,axis):
+	'''
+		Select an Axis. Invert the drawing
+		Future: Move the drawing freely. Select origin point
+	'''
 	pass
 
 def calibrate(gcode, ratio, var=None):
@@ -17,21 +21,22 @@ def calibrate(gcode, ratio, var=None):
 	for line in gcode:
 		l = []
 		for c in line.split():
-			print(c)
-			if c.find("X"):
+			if c.find('X') is 0:
 				aux = c.replace("X"," ")
 				aux = float(aux)*ratio
 				c = "{0:.4}".format(aux)
-			if c.find("Y"):
+			if c.find('Y') is 0:
 				aux = c.replace("Y"," ")
 				aux = float(aux)*ratio
 				c = "{0:.4}".format(aux)
-			l = l + c
-		print (l)
+			try:
+				l.append(c)
+				print (l)
+			except:
+				pass
 		ngcode.append(l)
 
 	return ngcode
-
 
 def loop(gcode,loops):
 	return [gcode.append[gcode] for x in range(loops)]
@@ -58,7 +63,7 @@ def save_gcode(gcode, filename):
 	n = n.replace(']','\n')
 	n = n.replace('\'','')
 
-	f = open('stub.gcode', 'w')
+	f = open(filename, 'w')
 	f.write("{}".format(n))
 	f.close()
 
@@ -69,7 +74,7 @@ def load_coord(filename):
 	try:
 		for line in f:
 			l = line.split()
-			gcode.append("G1 X" + "{0:.4}".format(float(l[0])) + " Y" + "{0:.4}".format(float(l[1])) + "]" )
+			gcode.append("G1 X" + "{0:.4}".format(float(l[0])) + " Y" + "{0:.4}".format(float(l[1])) + " ]" )
 	except:
 		pass
 	f.close()
@@ -105,7 +110,7 @@ def main():
 	parser = argparse.ArgumentParser(description='Convert Slic3r gcode')
 
 	parser.add_argument('--file',dest='file',required=False)
-	parser.add_argument('--output',dest='file',required=False)
+	parser.add_argument('--output',dest='output',required=False)
 	parser.add_argument('--loops',dest='loops',required=False)
 	parser.add_argument('--calibrate',dest='calibrate',required=False)
 	parser.add_argument('--var',dest='var',required=False)
@@ -123,15 +128,18 @@ def main():
 
 	if args.calibrate is not None:
 		if args.var is not None:
-			gcode = calibrate(gcode,args.calibrate,var=args.var)
+			gcode = calibrate(gcode,float(args.calibrate),var=args.var)
 		else:
-			gcode = calibrate(gcode,args.calibrate)
+			gcode = calibrate(gcode,float(args.calibrate))
 
 	if args.loops is not None:
 		if args.loops > 1:
 			gcode = loop(gcode,int(args.loops))
 
-	save_gcode(gcode,'stub.gcode')
+	if args.output is not None:
+		save_gcode(gcode, args.output)
+	else:
+		save_gcode(gcode,'stub.gcode')
 	
 
 if __name__ == '__main__':
