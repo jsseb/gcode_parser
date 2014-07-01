@@ -13,7 +13,7 @@ import argparse
 try:
 	import matplotlib.pyplot as plt
 except:
-	raise ImportError
+	pass
 
 
 def lissajous(a,b,rng,delta=None):
