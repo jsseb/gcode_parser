@@ -64,7 +64,7 @@ if __name__ == '__main__':
 	if args.precission is None:
 		precission = 0.1
 	else:
-		precission = args.precission
+		precission = float(args.precission)
 	if args.x is not None and args.y is not None:
 		l = lissajous(int(args.x),int(args.y),[0,2*np.pi, precission],delta = args.delta)
 	if args.file is not None:
