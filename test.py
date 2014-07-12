@@ -51,6 +51,7 @@ def squares(a,b,n,d,change):
 		x = x+change
 		y = y-change
 		l = l-2*change
+
 	return [X,Y]
 
 def lines(x,y,n,d,change):
@@ -91,23 +92,25 @@ if __name__ == '__main__':
 
 	parser.add_argument('--x',dest='x',required=True)
 	parser.add_argument('--y',dest='y',required=True)
-	parser.add_argument('--n',dest='n',required=False)
-	parser.add_argument('--d',dest='d',required=False)
 	parser.add_argument('--c',dest='c',required=False)
-
+	parser.add_argument('--d',dest='d',required=False)
+	parser.add_argument('--n',dest='n',required=False)
+	parser.add_argument('--delta',dest='delta',required=False)
+	parser.add_argument('--precission',dest='precission',required=False)
+	
 	parser.add_argument('--o',dest='option',required=True)
 
-	parser.add_argument('--precission',dest='precission',required=False)
 	parser.add_argument('--plot',dest='plot',required=False)
 	parser.add_argument('--print',dest='file',required=False)
 	parser.add_argument('--output',dest='filename',required=False)
-	parser.add_argument('--delta',dest='delta',required=False)
+
 	args = parser.parse_args()
 	
 	if args.precission is None:
 		precission = 0.01
 	else:
 		precission = float(args.precission)
+
 	if args.x is not None and args.y is not None:
 		if args.option == 'squares':
 			points = squares(int(args.x),int(args.y),int(args.n),int(args.d),int(args.c))
@@ -115,7 +118,9 @@ if __name__ == '__main__':
 			points = lines(int(args.x),int(args.y),int(args.n),int(args.d),int(args.c))
 		if args.option == 'lissa':
 			points = lissajous(int(args.x),int(args.y),[0,2*np.pi, precission],delta = args.delta)
+
 	if args.file is not None:
 		print_data(points,filename=args.filename)
+
 	if args.plot is not None:
 		plot_data(points)
