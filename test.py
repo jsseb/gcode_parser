@@ -12,7 +12,7 @@ import numpy as np
 import argparse
 try:
 	import matplotlib.pyplot as plt
-except:
+except ImportError:
 	pass
 
 
@@ -68,7 +68,7 @@ def lines(x,y,n,d,change):
 def print_data(curve,filename=None):
 
 	n = [[x,y] for x,y in zip(curve[0],curve[1])]
-	
+
 	if filename is None:
 		f = open('lissa.txt','w')
 	else:
