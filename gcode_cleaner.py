@@ -115,13 +115,8 @@ def main():
 	parser.add_argument('--calibrate',dest='calibrate',required=False)
 	parser.add_argument('--var',dest='var',required=False)
 	parser.add_argument('--coord',dest='coord',required=False)
-	parser.add_argument('--help',dest='help',required=False)
 
 	args = parser.parse_args()
-
-	if args.help is not None:
-		print ("Gcode cleaner:\n
-			")
 				
 	if args.file is not None:
 		gcode = load_gcode(args.file)
